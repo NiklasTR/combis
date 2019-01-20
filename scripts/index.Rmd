@@ -1,0 +1,25 @@
+--- 
+title: "RAPID"
+author: "Niklas Rindtorff"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+#bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+#github-repo: 
+description: "This is my growing code-based narrative for project RAPID"
+---
+
+# Introduction
+
+This is a comprehensive analytical workflow for project **RAPID**. **RAPID** stands for: _rapid phenotyping of cancer isolate dependencies_. 
+  
+This website is generated using the bookdown package. 
+
+##Timeline
+2018-06: I start out by curating a list of compounds with a high degree of selective activty in previously published pharmacogenomic screening projects and/or a high clinical relevance.  
+2018-07:
+
+

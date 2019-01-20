@@ -1,0 +1,35 @@
+drug_name,target,target_pathway,n
+PD173074,"FGFR1, FGFR3",RTK signaling,53
+TL-2-105,not defined,ERK MAPK signaling,56
+Alectinib,ALK,RTK signaling,56
+Quizartinib,FLT3,RTK signaling,56
+THZ-2-49,CDK9,Cell cycle,56
+Tamoxifen,ESR1,Hormone-related,55
+Nutlin-3a (-),MDM2,p53 pathway,54
+Cetuximab,EGFR,EGFR signaling,51
+NSC-87877,"SHP-1 (PTPN6), SHP-2 (PTPN11)",Other,47
+CP724714,ERBB2,EGFR signaling,56
+Amuvatinib,"KIT, PDGFRA, FLT3","Other, kinases",56
+Afatinib,"ERBB2, EGFR",EGFR signaling,53
+QL-XI-92,DDR1,Other,56
+Tubastatin A,"HDAC1, HDAC6, HDAC8",Chromatin histone acetylation,56
+Pelitinib,EGFR,EGFR signaling,56
+PLX-4720,BRAF,ERK MAPK signaling,54
+CHIR-99021,"GSK3A, GSK3B",WNT signaling,48
+rTRAIL,TRAIL receptor agonist,Apoptosis regulation,53
+NSC-207895,MDM4,p53 pathway,56
+PLX-4720,BRAF,ERK MAPK signaling,54
+WHI-P97,JAK3,"Other, kinases",56
+STF-62247,Autophagy inducer,Other,56
+IOX2,EGLN1,Other,57
+T0901317,"LXR, FXR",Other,56
+VX-702,p38,JNK and p38 signaling,53
+GSK429286A,"ROCK1, ROCK2",Cytoskeleton,56
+Selumetinib,"MEK1, MEK2",ERK MAPK signaling,52
+Afatinib,"ERBB2, EGFR",EGFR signaling,53
+Navitoclax,"BCL2, BCL-XL, BCL-W",Apoptosis regulation,54
+Enzastaurin,PKCB,"Other, kinases",56
+SB590885,BRAF,ERK MAPK signaling,53
+Linsitinib,IGF1R,IGFR signaling,46
+NPK76-II-72-1,PLK3,Cell cycle,56
+Y-39983,ROCK,Cytoskeleton,56

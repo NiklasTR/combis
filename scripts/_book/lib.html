@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>RAPID</title>
+  <meta name="description" content="This is my growing code-based narrative for project RAPID">
+  <meta name="generator" content="bookdown 0.7.10 and GitBook 2.6.7">
+
+  <meta property="og:title" content="RAPID" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is my growing code-based narrative for project RAPID" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="RAPID" />
+  
+  <meta name="twitter:description" content="This is my growing code-based narrative for project RAPID" />
+  
+
+<meta name="author" content="Niklas Rindtorff">
+
+
+<meta name="date" content="2018-07-29">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="index.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#timeline"><i class="fa fa-check"></i><b>1.1</b> Timeline</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="lib.html"><a href="lib.html"><i class="fa fa-check"></i><b>2</b> Compound library curation</a><ul>
+<li class="chapter" data-level="2.1" data-path="lib.html"><a href="lib.html#crxg_pp"><i class="fa fa-check"></i><b>2.1</b> Preprocess pharmacogenomic data</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="lib.html"><a href="lib.html#import-pharmacogenomic-data"><i class="fa fa-check"></i><b>2.1.1</b> Import pharmacogenomic data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="lib.html"><a href="lib.html#crxg_cs"><i class="fa fa-check"></i><b>2.1.2</b> Center and scale data</a></li>
+<li class="chapter" data-level="2.1.3" data-path="lib.html"><a href="lib.html#filter-underutilized-compounds"><i class="fa fa-check"></i><b>2.1.3</b> Filter underutilized compounds</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="lib.html"><a href="lib.html#identify-active-compounds-with-pharmacogenomic-data"><i class="fa fa-check"></i><b>2.2</b> Identify active compounds with pharmacogenomic data</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="lib.html"><a href="lib.html#illustrate-compound-activity"><i class="fa fa-check"></i><b>2.2.1</b> Illustrate compound activity</a></li>
+<li class="chapter" data-level="2.2.2" data-path="lib.html"><a href="lib.html#test-selective-compound-activity"><i class="fa fa-check"></i><b>2.2.2</b> Test selective compound activity</a></li>
+<li class="chapter" data-level="2.2.3" data-path="lib.html"><a href="lib.html#test-correlation-of-active-compounds"><i class="fa fa-check"></i><b>2.2.3</b> Test correlation of active compounds</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="lib.html"><a href="lib.html#add-compounds-in-clinical-use"><i class="fa fa-check"></i><b>2.3</b> Add compounds in clinical use</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="lib.html"><a href="lib.html#assess-selective-activity-of-clinical-compounds"><i class="fa fa-check"></i><b>2.3.1</b> Assess selective activity of clinical compounds</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="lib.html"><a href="lib.html#sampling-approach"><i class="fa fa-check"></i><b>2.4</b> Sampling approach</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">RAPID</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="lib" class="section level1">
+<h1><span class="header-section-number">2</span> Compound library curation</h1>
+<p>To define a small set of compounds with both a high clinical relevance and a high potential to be active, we use previous pharmacogenomic screening data from Iorio et al.</p>
+<div id="crxg_pp" class="section level2">
+<h2><span class="header-section-number">2.1</span> Preprocess pharmacogenomic data</h2>
+<p>I download the openly available dataset generated by Iorio et al.</p>
+<div id="import-pharmacogenomic-data" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Import pharmacogenomic data</h3>
+<p>The data is stored in separate excel files containing fitted dose response data as well as details about the profiled cell lines.</p>
+<p>Now I plot the distribution of ln(ic50)s for all drugs. As expected, distributions of transformed ic50 values are very heterogenous.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="crxg_cs" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Center and scale data</h3>
+<p>Next, I center and scale the log-transformed ic50s to compare distributions. First, I plot the centered distributions.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>For completeness, I also plot the centered and scaled ln(IC50) values.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="filter-underutilized-compounds" class="section level3">
+<h3><span class="header-section-number">2.1.3</span> Filter underutilized compounds</h3>
+<p>I wonder if there are compounds which were only seldom screened. I remove these drugs and work with the residual dataset.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>I overwrite the original object after QC and save it.</p>
+</div>
+</div>
+<div id="identify-active-compounds-with-pharmacogenomic-data" class="section level2">
+<h2><span class="header-section-number">2.2</span> Identify active compounds with pharmacogenomic data</h2>
+<div id="illustrate-compound-activity" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Illustrate compound activity</h3>
+<p>I start out by gaining an overview of differential compound activities in the dataset. Therefore, I prepare a heatmap of transformed ic50 values for each compound and cell line pair.<br />
+Even after filtering rare compounds, I observe a considerable fraction of cell lines that have not been exposed to every drug.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Without dropping NAs the dimensions are:</p>
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 2.1: </span>dataset dimensions with NAs</caption>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1065</td>
+</tr>
+<tr class="even">
+<td align="right">210</td>
+</tr>
+</tbody>
+</table>
+<p>With dropping NAs the dimensions are:</p>
+<table>
+<caption><span id="tab:unnamed-chunk-10">Table 2.2: </span>dataset dimensions without NAs</caption>
+<thead>
+<tr class="header">
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">296</td>
+</tr>
+<tr class="even">
+<td align="right">210</td>
+</tr>
+</tbody>
+</table>
+<p>Now I create a heatmap of compound sensitivities (with NAs removed).</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Gastric and esophageal cancer cell lines do not seem to be highly related in terms of their compound sensitivity profiles. I continue my analysis by filtering for compounds with a strong selective activity for a subgroup of these GEA-related cancer cell lines.</p>
+</div>
+<div id="test-selective-compound-activity" class="section level3">
+<h3><span class="header-section-number">2.2.2</span> Test selective compound activity</h3>
+<p>I am interested in compounds with a non-normal distribution of ic50 values. I base my further analysis on two assumptions.<br />
+* I assume, that compounds with normally distributed ln(ic50) have limited selective activity. On the other hand, treatments with exceptional activity in some cell lines will have skewed, non-normal distributions of ln(ic50) values.<br />
+* I assume that, similiarly to the clinical setting, an exceptional response is a rare event. Therfore, treatments with skewed distributions that point towards higher resistance are of limited interest.</p>
+<p>To test for non-normality of ic50 distributions, I use a modified non-parametric kolmogorov smirnov test (lillie test). To remove compounds which have a skewed profile towards higher necessary doses, I estimate the orientation of the skewness and apply a filter.</p>
+<p>First I apply my outlined approach to all available cell lines in the dataset. The resulting vulcano plot shows compounds with a non-normal distribution at the top of the plot and compounds with a skewness towards lower concentrations on the left side of the plot.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>I now filter all stomach and oesophageal cancer cell lines. I base the following analysis on compound response data generated from ca. 60 cancer cell lines.</p>
+<p>I now apply my outlined approach to the selected cell lines. Again, the resulting vulcano plot shows compounds with a non-normal distribution at the top of the plot and compounds with a skewness towards lower concentrations on the left side of the plot.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>I can identify drugs with a high selective activity. As a sanity check, I plot selected distributions of the ln(ic50)s for active compounds in gastric and esophageal cancer cells.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>The majority of selectively active compounds were also active from a pan-cancer perspective. Of all compounds tested by Iorio et al, about 60% of compounds were active in a pan-cancer setting according to my approach. This fraction seems conservative when considering the biased composition of the compound library used.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>I prepare a shortlist of candidate compounds.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-19">Table 2.3: </span>A shortlist of selectively active drugs</caption>
+<thead>
+<tr class="header">
+<th align="left">drug_name</th>
+<th align="left">target</th>
+<th align="left">target_pathway</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">PD173074</td>
+<td align="left">FGFR1, FGFR3</td>
+<td align="left">RTK signaling</td>
+<td align="right">53</td>
+</tr>
+<tr class="even">
+<td align="left">TL-2-105</td>
+<td align="left">not defined</td>
+<td align="left">ERK MAPK signaling</td>
+<td align="right">56</td>
+</tr>
+<tr class="odd">
+<td align="left">Alectinib</td>
+<td align="left">ALK</td>
+<td align="left">RTK signaling</td>
+<td align="right">56</td>
+</tr>
+<tr class="even">
+<td align="left">Quizartinib</td>
+<td align="left">FLT3</td>
+<td align="left">RTK signaling</td>
+<td align="right">56</td>
+</tr>
+<tr class="odd">
+<td align="left">THZ-2-49</td>
+<td align="left">CDK9</td>
+<td align="left">Cell cycle</td>
+<td align="right">56</td>
+</tr>
+<tr class="even">
+<td align="left">Tamoxifen</td>
+<td align="left">ESR1</td>
+<td align="left">Hormone-related</td>
+<td align="right">55</td>
+</tr>
+<tr class="odd">
+<td align="left">Nutlin-3a (-)</td>
+<td align="left">MDM2</td>
+<td align="left">p53 pathway</td>
+<td align="right">54</td>
+</tr>
+<tr class="even">
+<td align="left">Cetuximab</td>
+<td align="left">EGFR</td>
+<td align="left">EGFR signaling</td>
+<td align="right">51</td>
+</tr>
+<tr class="odd">
+<td align="left">NSC-87877</td>
+<td align="left">SHP-1 (PTPN6), SHP-2 (PTPN11)</td>
+<td align="left">Other</td>
+<td align="right">47</td>
+</tr>
+<tr class="even">
+<td align="left">CP724714</td>
+<td align="left">ERBB2</td>
+<td align="left">EGFR signaling</td>
+<td align="right">56</td>
+</tr>
+<tr class="odd">
+<td align="left">Amuvatinib</td>
+<td align="left">KIT, PDGFRA, FLT3</td>
+<td align="left">Other, kinases</td>
+<td align="right">56</td>
+</tr>
+<tr class="even">
+<td align="left">Afatinib</td>
+<td align="left">ERBB2, EGFR</td>
+<td align="left">EGFR signaling</td>
+<td align="right">53</td>
+</tr>
+<tr class="odd">
+<td align="left">QL-XI-92</td>
+<td align="left">DDR1</td>
+<td align="left">Other</td>
+<td align="right">56</td>
+</tr>
+<tr class="even">
+<td align="left">Tubastatin A</td>
+<td align="left">HDAC1, HDAC6, HDAC8</td>
+<td align="left">Chromatin histone acetylation</td>
+<td align="right">56</td>
+</tr>
+<tr class="odd">
+<td align="left">Pelitinib</td>
+<td align="left">EGFR</td>
+<td align="left">EGFR signaling</td>
+<td align="right">56</td>
+</tr>
+<tr class="even">
+<td align="left">PLX-4720</td>
+<td align="left">BRAF</td>
+<td align="left">ERK MAPK signaling</td>
+<td align="right">54</td>
+</tr>
+<tr class="odd">
+<td align="left">CHIR-99021</td>
+<td align="left">GSK3A, GSK3B</td>
+<td align="left">WNT signaling</td>
+<td align="right">48</td>
+</tr>
+<tr class="even">
+<td align="left">rTRAIL</td>
+<td align="left">TRAIL receptor agonist</td>
+<td align="left">Apoptosis regulation</td>
+<td align="right">53</td>
+</tr>
+<tr class="odd">
+<td align="left">NSC-207895</td>
+<td align="left">MDM4</td>
+<td align="left">p53 pathway</td>
+<td align="right">56</td>
+</tr>
+<tr class="even">
+<td align="left">PLX-4720</td>
+<td align="left">BRAF</td>
+<td align="left">ERK MAPK signaling</td>
+<td align="right">54</td>
+</tr>
+<tr class="odd">
+<td align="left">WHI-P97</td>
+<td align="left">JAK3</td>
+<td align="left">Other, kinases</td>
+<td align="right">56</td>
+</tr>
+<tr class="even">
+<td align="left">STF-62247</td>
+<td align="left">Autophagy inducer</td>
+<td align="left">Other</td>
+<td align="right">56</td>
+</tr>
+<tr class="odd">
+<td align="left">IOX2</td>
+<td align="left">EGLN1</td>
+<td align="left">Other</td>
+<td align="right">57</td>
+</tr>
+<tr class="even">
+<td align="left">T0901317</td>
+<td align="left">LXR, FXR</td>
+<td align="left">Other</td>
+<td align="right">56</td>
+</tr>
+<tr class="odd">
+<td align="left">VX-702</td>
+<td align="left">p38</td>
+<td align="left">JNK and p38 signaling</td>
+<td align="right">53</td>
+</tr>
+<tr class="even">
+<td align="left">GSK429286A</td>
+<td align="left">ROCK1, ROCK2</td>
+<td align="left">Cytoskeleton</td>
+<td align="right">56</td>
+</tr>
+<tr class="odd">
+<td align="left">Selumetinib</td>
+<td align="left">MEK1, MEK2</td>
+<td align="left">ERK MAPK signaling</td>
+<td align="right">52</td>
+</tr>
+<tr class="even">
+<td align="left">Afatinib</td>
+<td align="left">ERBB2, EGFR</td>
+<td align="left">EGFR signaling</td>
+<td align="right">53</td>
+</tr>
+<tr class="odd">
+<td align="left">Navitoclax</td>
+<td align="left">BCL2, BCL-XL, BCL-W</td>
+<td align="left">Apoptosis regulation</td>
+<td align="right">54</td>
+</tr>
+<tr class="even">
+<td align="left">Enzastaurin</td>
+<td align="left">PKCB</td>
+<td align="left">Other, kinases</td>
+<td align="right">56</td>
+</tr>
+<tr class="odd">
+<td align="left">SB590885</td>
+<td align="left">BRAF</td>
+<td align="left">ERK MAPK signaling</td>
+<td align="right">53</td>
+</tr>
+<tr class="even">
+<td align="left">Linsitinib</td>
+<td align="left">IGF1R</td>
+<td align="left">IGFR signaling</td>
+<td align="right">46</td>
+</tr>
+<tr class="odd">
+<td align="left">NPK76-II-72-1</td>
+<td align="left">PLK3</td>
+<td align="left">Cell cycle</td>
+<td align="right">56</td>
+</tr>
+<tr class="even">
+<td align="left">Y-39983</td>
+<td align="left">ROCK</td>
+<td align="left">Cytoskeleton</td>
+<td align="right">56</td>
+</tr>
+</tbody>
+</table>
+<p>There are compounds in this shortlist which have to be manually filtered for</p>
+</div>
+<div id="test-correlation-of-active-compounds" class="section level3">
+<h3><span class="header-section-number">2.2.3</span> Test correlation of active compounds</h3>
+<p>To reduce the redundancy in the dataset I measure the correlation of compound activity profiles across the whole dataset. Compounds with similiar profiles are grouped together.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>Finally, I export a file with the selected compounds and check their clinical availibility.</p>
+</div>
+</div>
+<div id="add-compounds-in-clinical-use" class="section level2">
+<h2><span class="header-section-number">2.3</span> Add compounds in clinical use</h2>
+<p>I went through current evidence based guidelines for the treatment of gastroesophageal adenocarcinoma and selected the following compounds for close evaluation.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-22">Table 2.4: </span>A shortlist of drugs in clinical use</caption>
+<thead>
+<tr class="header">
+<th align="left">drug</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Trastuzumab</td>
+</tr>
+<tr class="even">
+<td align="left">Cisplatin</td>
+</tr>
+<tr class="odd">
+<td align="left">Oxaliplatin</td>
+</tr>
+<tr class="even">
+<td align="left">Carboplatin</td>
+</tr>
+<tr class="odd">
+<td align="left">5-Fluorouracil</td>
+</tr>
+<tr class="even">
+<td align="left">Epirubicin</td>
+</tr>
+<tr class="odd">
+<td align="left">Docetaxel</td>
+</tr>
+<tr class="even">
+<td align="left">Paclitaxel</td>
+</tr>
+<tr class="odd">
+<td align="left">SN-38</td>
+</tr>
+<tr class="even">
+<td align="left">Pembrolizumab</td>
+</tr>
+</tbody>
+</table>
+<div id="assess-selective-activity-of-clinical-compounds" class="section level3">
+<h3><span class="header-section-number">2.3.1</span> Assess selective activity of clinical compounds</h3>
+<p>I wonder if these clincal compounds show some differential activity on a pan-cancer level. If this would not be the case, there would be only a weak rationale for keeping these compounds in the library.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>Many compounds in the clinical compounds shortlist are highly related. We should discuss wether all of these compounds should stay in the final compound panel.</p>
+</div>
+</div>
+<div id="sampling-approach" class="section level2">
+<h2><span class="header-section-number">2.4</span> Sampling approach</h2>
+<p><img src="_main_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+---
+title: "1_tidy_cancerrxgene_data"
+author: "Niklas Rindtorff"
+date: "3/5/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Introduction 
+#Load packages
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(stringr)
+
+```
+
+#Import excel data
+
+```{r}
+
+crxg <- read_excel("~/combis/local_data/v17_fitted_dose_response.xlsx") %>% dplyr::select(-c(1,2)) %>% `colnames<-`(colnames(.) %>% tolower()) %>%
+  full_join(., read_excel("~/combis/local_data/Screened_Compounds.xlsx") %>% `colnames<-`(colnames(.) %>% tolower()) %>% rename(drug_id = `drug id`, drug_name = `drug name`, target_pathway = `target pathway`)) %>%
+  full_join(., read_excel("~/combis/local_data/Cell_Lines_Details.xlsx", sheet = "Cell line details") %>% `colnames<-`(colnames(.) %>% tolower() %>% str_replace_all(., " ", "_"))  %>%  dplyr::select(c(1,2,8,9,10,11,12,13)) %>% `colnames<-`(c("sample_name", "cosmic_id", "gdsc_tissue_1", "gdsc_tissue_2", "cancer_type", "msi", "medium", "growth_properties")))
+  
+```
+
+#Scale data
+
+Now I plot the distribution of ln_ic50s for all drugs. They are all over the place.
+
+```{r}
+crxg %>% 
+  ggplot(aes(ln_ic50, group = drug_id)) + 
+  geom_density(alpha = 1, size = 0.2) + 
+  theme_classic() + 
+  labs(x = "raw ln(IC50)") + 
+  ggsave("raw_ic50.pdf", width = 3, height = 2)
+```
+
+Now I scale the ic50s to compare distributions
+
+```{r}
+crxg <- crxg %>%
+  group_by(drug_id) %>%
+  mutate(rob_z = (ln_ic50 - median(ln_ic50))/mad(ln_ic50),
+         rob_center = (ln_ic50 - median(ln_ic50)))
+
+crxg %>% 
+  ggplot(aes(rob_z, group = drug_id)) + 
+  geom_density(alpha = 1, size = 0.2) + 
+  theme_classic() + 
+  labs(x = "centered and scaled ln(IC50)") + 
+  ggsave("norm_ic50.pdf", width = 3, height = 2)
+```
+
+I also plot the centered ln(IC50) values.
+
+```{r}
+crxg %>% 
+  ggplot(aes(rob_center, group = drug_id)) + 
+  geom_density(alpha = 1, size = 0.2) + 
+  theme_classic() + 
+  labs(x = "centered ln(IC50)") + 
+  ggsave("centered_ic50.pdf", width = 3, height = 2)
+```
+
+#QC
+
+I wonder if there are compounds which were only seldom screened. I remove these drugs and work with the residual dataset.
+
+```{r}
+cutoff <- 850
+
+keep_drugs <-crxg %>% 
+  ungroup %>% filter(!is.na(drug_id), !is.na(cosmic_id)) %>%
+  select(cosmic_id, drug_id) %>% distinct() %>% group_by(drug_id) %>% summarise(n = n()) %>% 
+  filter(n > cutoff) %>%  
+  drop_na() %>% .$drug_id
+
+crxg %>% 
+  ungroup %>% filter(!is.na(drug_id), !is.na(cosmic_id)) %>%
+  select(cosmic_id, drug_id) %>% distinct() %>% group_by(drug_id) %>% summarise(n = n()) %>% 
+  arrange(n) %>%
+  mutate(drug_id = factor(drug_id, levels =  .$drug_id)) %>% 
+  ggplot(aes(drug_id, n)) + 
+  geom_point() + 
+  theme_classic() + 
+  #scale_y_log10() + 
+  theme(axis.text.x = element_blank()) + 
+  geom_hline(yintercept = cutoff) + 
+  ggsave("filter_drugs.pdf", width = 3, height = 2)
+```
+
+I overwrite the original object after QC. 
+
+```{r}
+crxg <- crxg %>% 
+  ungroup %>% filter(!is.na(drug_id), !is.na(cosmic_id), drug_id %in% keep_drugs)
+```
+
+
+Finally, I save my result for further analysis
+
+```{r}
+save(crxg, file = "crxg.Rdata")
+```
+
+

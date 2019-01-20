@@ -1,0 +1,244 @@
+---
+title: "pan_cancer_analysis"
+author: "Niklas Rindtorff"
+date: "5/13/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE)
+```
+
+#Introduction 
+#Load packages
+
+```{r}
+library(tidyverse)
+library(stringr)
+
+```
+
+#Load data
+```{r}
+load("crxg.Rdata")
+```
+
+
+#Correlation pan-cancer
+
+I show the null-distribution of drug correlations for all drugs and cell lines available.
+
+```{r}
+crxgr_pan <- crxg %>% dplyr::select(drug_id, cosmic_id, rob_z) %>%
+  filter(!is.na(drug_id), !is.na(cosmic_id)) %>%
+  spread(drug_id, rob_z) %>% 
+  dplyr::select(-cosmic_id)%>%
+  corrr::correlate(method = "spearman", use = "pairwise.complete.obs") %>%
+  corrr::stretch()
+
+crxgr_pan %>%
+  drop_na() %>%
+  ggplot(aes(r)) + 
+  geom_density() + 
+  theme_classic()
+```
+
+```{r}
+crxg_map <- crxg %>% dplyr::select(drug_id, cosmic_id, ln_ic50) %>%
+  filter(!is.na(drug_id), !is.na(cosmic_id)) %>% 
+  group_by(drug_id) %>% 
+  mutate(med_ln_ic50 = median(ln_ic50, na.rm = TRUE)) %>% 
+  mutate(norm_ln_ic50 = ln_ic50 - med_ln_ic50) %>%
+  ungroup() %>% 
+  dplyr::select(drug_id, cosmic_id, norm_ln_ic50) %>%
+  spread(drug_id, norm_ln_ic50) %>% 
+  column_to_rownames("cosmic_id") %>% 
+  #drop_na() %>%
+  as.data.frame() 
+
+crxg_map %>%
+  naniar::vis_miss()
+```
+
+Without dropping NAs the dimensions are: 
+
+```{r}
+crxg_map %>% dim()
+```
+
+With dropping NAs the dimensions are: 
+
+```{r}
+crxg_map %>%
+  drop_na() %>% dim()
+```
+
+
+```{r}
+anno_row  = crxg %>% 
+  drop_na() %>%
+                  dplyr::select(cosmic_id, cancer_type ) %>% 
+                  distinct() %>%
+  mutate(gi_cancer = if_else(cancer_type %in% c("COAD/READ", "ESCA", "PAAD", "STAD"), "GI", "other")) %>%
+  as.data.frame() %>%
+  remove_rownames() %>%
+  dplyr::select(-cancer_type) %>%
+                  column_to_rownames("cosmic_id")
+
+anno_col  = crxg %>% 
+  drop_na() %>%
+                  dplyr::select(drug_id, target_pathway) %>% 
+                  distinct() %>%
+  as.data.frame() %>%
+  remove_rownames() %>%
+                  column_to_rownames("drug_id")
+
+
+crxg_map %>%
+  drop_na() %>%
+  pheatmap::pheatmap(na_col = "grey", scale = "column",
+                     #annotation_col = anno_col, 
+                     annotation_row = anno_row, 
+                     show_rownames = FALSE, show_colnames = FALSE,
+                     cutree_rows = 5, 
+                     filename = "crxg.pdf", width = 9, height = 9)
+                     
+```
+
+Idea: only show drugs with 6sigma activity
+I now filter all GI lines and plot the compound responses for these cases. 
+
+```{r}
+crxg_map_gi <- crxg %>% 
+  filter(cancer_type %in% c("COAD/READ", "ESCA", "PAAD", "STAD")) %>%
+  dplyr::select(drug_id, cosmic_id, ln_ic50) %>%
+  filter(!is.na(drug_id), !is.na(cosmic_id)) %>% 
+  
+  group_by(drug_id) %>% 
+  mutate(med_ln_ic50 = median(ln_ic50, na.rm = TRUE)) %>% 
+  mutate(norm_ln_ic50 = ln_ic50 - med_ln_ic50) %>%
+  ungroup() %>% 
+  dplyr::select(drug_id, cosmic_id, norm_ln_ic50) %>%
+  spread(drug_id, norm_ln_ic50) %>% 
+  column_to_rownames("cosmic_id") %>% 
+  #drop_na() %>%
+  as.data.frame() 
+
+crxg_map_gi %>%
+  #drop_na() %>%
+  naniar::vis_miss()
+```
+
+```{r}
+crxg %>% 
+  filter(cancer_type %in% c("COAD/READ", "ESCA", "PAAD", "STAD")) %>% 
+  group_by(drug_id, drug_name) %>% 
+  summarise(var = var(ln_ic50),
+            var_test = var(rob_center)) %>% View
+  ggplot(aes(reorder(drug_name, - var), var)) + 
+  geom_point()
+```
+
+```{r}
+df <- crxg %>% 
+  filter(cancer_type %in% c("COAD/READ", "ESCA", "PAAD", "STAD")) %>% 
+  group_by(drug_name) %>%
+  mutate(var = var(ln_ic50)) %>%
+  left_join(., 
+            crxg %>% 
+  filter(cancer_type %in% c("COAD/READ", "ESCA", "PAAD", "STAD")) %>% 
+  group_by(drug_name) %>%
+  do(shapiro.test(.$ln_ic50) %>% broom::tidy()) %>% 
+  mutate(p.adj = p.adjust(p.value, method = "BH"))) %>% 
+  mutate(l.p.adj = -log(p.adj)) %>% 
+  ungroup() %>%
+  mutate(doi = if_else(l.p.adj > 19, TRUE, FALSE)) %>%
+  dplyr::select(drug_name, var, l.p.adj, doi) %>% 
+  distinct()
+
+df %>%
+  #ggplot(aes(reorder(drug_name, - p.adj), p.adj)) + 
+  ggplot(aes(var, l.p.adj)) + 
+  geom_point() + 
+  ggrepel::geom_text_repel(data = df %>% filter(doi == TRUE), aes(label = drug_name)) +
+  geom_hline(yintercept = 5) +
+  #scale_y_log10() + 
+  theme_classic() + 
+  geom_rug() +
+  ggsave("non_normal_drugs.pdf", width = 4, height = 4)
+```
+
+```{r}
+df %>% 
+  filter(l.p.adj >5) %>% View
+```
+
+```{r}
+abnormal_drugs <- df %>% 
+  filter(l.p.adj >5) %>% .$drug_name
+```
+
+filter only the abnormal drugs and 
+
+```{r}
+crxgr_pan %>%
+  
+  drop_na() %>%
+  ggplot(aes(r)) + 
+  geom_density() + 
+  theme_classic()
+```
+
+
+
+```{r}
+load("~/combis/crxgf.Rdata")
+```
+
+```{r}
+crxgf %>% 
+  #filter(!is.na(drug_id), !is.na(cosmic_id), cancer_type %in% keep_types) %>%
+  #filter(cancer_type == "COAD/READ") %>% 
+  filter(!is.na(drug_id), !is.na(cosmic_id), cancer_type %in% c("COAD/READ", "ESCA", "PAAD", "STAD")) %>%
+  filter(drug_name %in% abnormal_drugs) %>%
+  dplyr::select(drug_id, cosmic_id, rob_z) %>%
+    spread(drug_id, rob_z) %>% 
+    dplyr::select(-cosmic_id)%>%
+    cor(method = "spearman", use = "pairwise.complete.obs") %>% 
+  pheatmap::pheatmap(filename = "gi_cancer_cor_abnormal.pdf",
+                     width = 10, height = 10)
+
+crxgf %>% 
+  #filter(!is.na(drug_id), !is.na(cosmic_id), cancer_type %in% keep_types) %>%
+  #filter(cancer_type == "COAD/READ") %>% 
+  filter(!is.na(drug_id), !is.na(cosmic_id), cancer_type %in% c("COAD/READ", "ESCA", "PAAD", "STAD")) %>%
+  filter(drug_name %in% abnormal_drugs) %>%
+  dplyr::select(drug_id, cosmic_id, rob_z) %>%
+    spread(drug_id, rob_z) %>% 
+    dplyr::select(-cosmic_id)%>%
+    cor(method = "spearman", use = "pairwise.complete.obs") %>% View
+```
+
+Prepare a heatmap of differential cell line response
+
+```{r, eval = FALSE}
+anno_col  = crxg %>% 
+  drop_na() %>%
+                  dplyr::select(drug_id, target_pathway) %>% 
+                  distinct() %>%
+  as.data.frame() %>%
+  remove_rownames() %>%
+                  column_to_rownames("drug_id")
+
+
+crxg_map_gi %>%
+  drop_na() %>%
+  pheatmap::pheatmap(na_col = "grey", scale = "none",
+                     #annotation_col = anno_col, 
+                     annotation_row = anno_row, 
+                     show_rownames = FALSE, show_colnames = FALSE,
+                     cutree_rows = 5, 
+                     filename = "crxg_gi.pdf", width = 9, height = 9)
+```
+
